@@ -3,11 +3,30 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { PersistGate } from "redux-persist/integration/react";
+import { Provider } from "react-redux";
+import { ConfigProvider } from "antd";
+import store, { persistor } from "./store";
+import { BrowserRouter } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <PersistGate persistor={persistor} loading={null}>
+        <BrowserRouter>
+          <ConfigProvider
+            theme={{
+              token: {
+                colorPrimary: "#3B51FA",
+              },
+            }}
+          >
+            <App />
+          </ConfigProvider>
+        </BrowserRouter>
+      </PersistGate>
+    </Provider>
   </React.StrictMode>
 );
 
