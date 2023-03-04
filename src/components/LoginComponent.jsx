@@ -1,16 +1,17 @@
 import React from "react";
-import { Form, Typography, Input, Button, Row } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { Button, Form, Input, Row, Typography } from "antd";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+
 const { Text } = Typography;
 
 function LoginComponent() {
   const onFinish = (values) => {
     console.log("Success:", values);
   };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
+  // const onFinishFailed = (errorInfo) => {
+  //   console.log("Failed:", errorInfo);
+  // };
   return (
     <div className="flex flex-col w-full bg-gradient-to-r from-indigo-700 to-indigo-500 items-center justify-center h-screen">
       <h2 className="text-white text-xl font-semibold mb-4">
