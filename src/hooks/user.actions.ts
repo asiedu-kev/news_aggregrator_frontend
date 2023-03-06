@@ -27,7 +27,7 @@ function useUserActions() {
         localStorage.setItem("user", JSON.stringify(res.data));
         dispatch(
           authSlice.actions.setAuthTokens({
-            token: res.data.token,
+            token: res.data.access_token,
           })
         );
         dispatch(authSlice.actions.setAccount(res.data.account));

@@ -1,30 +1,48 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
+import axiosService from "../services/axios";
+import { message } from "antd";
+import { store } from "../store";
 
-const articles = [
-  {
-    author: "Jane Cooper",
-    source: "TechCrunch",
-    title: "Tesla Investor Day: Here's how to watch and what to expect",
-    description:
-      "Tesla investor day is upon us. Here's how to watch Tesla CEO Elon " +
-      "Musk reveal what his plans are for the company.",
-    role: "Admin",
-    content:
-      "Tesla investor day is upon us, an occasion where shareholders and super fans will make their pilgrimage " +
-      "to the companys Gigafactory Texas located near Austin while the rest of us tune in via live str… [+3895 chars]",
-    publishedAt: "2023-03-01T16:21:22Z",
-    urlToImage:
-      "https://techcrunch.com/wp-content/uploads/2022/04/tesla-cyber-rodeo-giga-texas.jpg",
-    url: "https://techcrunch.com/2023/03/01/tesla-investor-day-how-to-watch-what-to-expect/",
-    email: "janecooper@example.com",
-    telephone: "+1-202-555-0170",
-    imageUrl:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60",
-  },
-];
+// const articles = [
+//   {
+//     author: "Jane Cooper",
+//     source: "TechCrunch",
+//     title: "Tesla Investor Day: Here's how to watch and what to expect",
+//     description:
+//       "Tesla investor day is upon us. Here's how to watch Tesla CEO Elon " +
+//       "Musk reveal what his plans are for the company.",
+//     content:
+//       "Tesla investor day is upon us, an occasion where shareholders and super fans will make their pilgrimage " +
+//       "to the companys Gigafactory Texas located near Austin while the rest of us tune in via live str… [+3895 chars]",
+//     publishedAt: "2023-03-01T16:21:22Z",
+//     urlToImage:
+//       "https://techcrunch.com/wp-content/uploads/2022/04/tesla-cyber-rodeo-giga-texas.jpg",
+//     url: "https://techcrunch.com/2023/03/01/tesla-investor-day-how-to-watch-what-to-expect/",
+//     imageUrl:
+//       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60",
+//   },
+// ];
 
 export default function NewsCard() {
+  const [articles, setArticles] = useState([]);
+
+  console.log(store.getState());
+  useEffect(() => {
+    fetchArticles();
+  }, []);
+
+  const fetchArticles = () => {
+    axiosService
+      .get(`v1/articles`)
+      .then((res) => {
+        console.log(res.data.data);
+        setArticles(res.data.data);
+      })
+      .catch((err) => {
+        message.error(err.message);
+      });
+  };
   return (
     <ul
       role="list"
@@ -49,12 +67,12 @@ export default function NewsCard() {
                 {article.title}
               </p>
               <p className="mt-1 truncate text-xs text-gray-400">
-                {moment(article.publishedAt).startOf("hour").fromNow()}
+                {moment(article.published_at).startOf("hour").fromNow()}
               </p>
             </div>
             <img
               className="h-20 w-20 flex-shrink-0  bg-gray-300"
-              src={article.urlToImage}
+              src={article.url_to_image}
               alt=""
             />
           </div>
