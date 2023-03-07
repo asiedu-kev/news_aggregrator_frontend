@@ -20,8 +20,13 @@ export default function FilterComponent({
         defaultValue={defaultValue}
         onChange={(value) => selectAction(value.target.value)}
       >
+        {defaultValue != null ? (
+          <option key={defaultValue} value={defaultValue}>
+            {defaultValue}
+          </option>
+        ) : null}
         {data.map((item) => (
-          <option key={item.id} value={item.name}>
+          <option key={item.name} value={item.name}>
             {item.name.replace(/_/g, " ")}
           </option>
         ))}

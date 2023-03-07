@@ -13,6 +13,7 @@ function useUserActions() {
     login,
     logout,
     register,
+    updateUser,
   };
 
   function login(email: string, password: string) {
@@ -22,7 +23,6 @@ function useUserActions() {
         password,
       })
       .then((res) => {
-        console.log("hey", res);
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         localStorage.setItem("user", JSON.stringify(res.data));
         dispatch(
@@ -59,6 +59,24 @@ function useUserActions() {
         );
         dispatch(authSlice.actions.setAccount(res.data.data.account));
         console.log("to=>home");
+        navigate("/home");
+      });
+  }
+
+  function updateUser(id, first_name, last_name, email, country) {
+    return axiosService
+      .put(`v1/accounts/${id}`, {
+        country: country,
+      })
+      .then((res) => {
+        // store user details and jwt token in local storage to keep user logged in between page refreshes
+        localStorage.setItem("user", JSON.stringify(res.data));
+        dispatch(
+          authSlice.actions.setAuthTokens({
+            token: res.data.access_token,
+          })
+        );
+        dispatch(authSlice.actions.setAccount(res.data.account));
         navigate("/home");
       });
   }
