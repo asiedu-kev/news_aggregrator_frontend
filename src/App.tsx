@@ -3,7 +3,9 @@ import LoginComponent from "./components/LoginComponent";
 import { Route, Routes } from "react-router-dom";
 import RegisterComponent from "./components/RegisterComponent";
 import HomeLayout from "./layouts/HomeLayout";
-import NewsCard from "./components/NewsCard";
+import { MyPreferences } from "./pages/MyPreferences";
+import { Settings } from "./pages/Settings";
+import { Feed } from "./pages/Feed";
 
 function App() {
   return (
@@ -14,8 +16,24 @@ function App() {
       <Route
         path="/home"
         element={
-          <HomeLayout>
-            <NewsCard />
+          <HomeLayout title={"Feed"}>
+            <Feed />
+          </HomeLayout>
+        }
+      />
+      <Route
+        path="/preferences"
+        element={
+          <HomeLayout title={"My preferences"}>
+            <MyPreferences />
+          </HomeLayout>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <HomeLayout title={"Settings"}>
+            <Settings />
           </HomeLayout>
         }
       />

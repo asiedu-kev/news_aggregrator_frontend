@@ -1,17 +1,3 @@
-/*
-  This example requires some changes to your config:
-
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
 import React, { Fragment, useState } from "react";
 import { Dialog, Menu, Transition } from "@headlessui/react";
 import {
@@ -20,26 +6,12 @@ import {
   BookmarkIcon,
   Cog6ToothIcon,
   HomeIcon,
-  ListBulletIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
-import FilterComponent from "../components/FilterComponent";
-import { Space } from "antd";
 import ConfirmationModal from "../components/ConfirmationModal";
 import { useUserActions } from "../hooks/user.actions";
-
-const navigation = [
-  { name: "My Feed", href: "#", icon: HomeIcon, current: true },
-  { name: "Categories", href: "#", icon: ListBulletIcon, current: false },
-  { name: "My Preferences", href: "#", icon: BookmarkIcon, current: false },
-  { name: "Settings", href: "#", icon: Cog6ToothIcon, current: false },
-];
-const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
-];
+import { useLocation } from "react-router-dom";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -47,11 +19,38 @@ function classNames(...classes) {
 
 export type HomeLayoutProps = {
   children: React.ReactNode;
+  title: string;
 };
 
-function HomeLayout({ children }: HomeLayoutProps) {
+function HomeLayout({ children, title }: HomeLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const location = useLocation();
+  console.log(location.pathname);
+  const navigation = [
+    {
+      name: "My Feed",
+      href: "/home",
+      icon: HomeIcon,
+      current: location.pathname == "/home",
+    },
+    {
+      name: "My Preferences",
+      href: "/preferences",
+      icon: BookmarkIcon,
+      current: location.pathname == "/preferences",
+    },
+    {
+      name: "Settings",
+      href: "/settings",
+      icon: Cog6ToothIcon,
+      current: location.pathname == "/settings",
+    },
+  ];
+  const userNavigation = [
+    { name: "Settings", href: "/settings" },
+    { name: "Sign out", href: "#" },
+  ];
 
   const userActions = useUserActions();
   const showModal = () => {
@@ -287,14 +286,8 @@ function HomeLayout({ children }: HomeLayoutProps) {
             <div className="py-6">
               <div className="flex flex-row justify-between mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <h1 className="text-2xl font-semibold text-gray-900">
-                  List of articles
+                  {title}
                 </h1>
-                <div className={"flex flex-row"}>
-                  <Space>
-                    <FilterComponent />
-                    <FilterComponent />
-                  </Space>
-                </div>
               </div>
               <div className="mx-auto max-w-7xl px-4 sm:px-6 py-1 lg:px-8">
                 {children}
