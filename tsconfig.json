@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "skipLibCheck": false,
     "allowSyntheticDefaultImports": true,
     "strict": false,
@@ -19,8 +15,5 @@
     "allowJs": false,
     "esModuleInterop": false
   },
-  "exclude": [
-    "node_modules",
-    "src"
-  ]
+  "exclude": ["node_modules", "src"]
 }
