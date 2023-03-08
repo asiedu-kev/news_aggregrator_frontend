@@ -2,12 +2,16 @@ import React, { useState } from "react";
 import moment from "moment";
 import ArticleDetailComponent from "./ArticleDetailComponent";
 import parse from "html-react-parser";
+import { useUserActions } from "../hooks/user.actions";
+import { message } from "antd";
 
 export type NewsCardProps = {
   article: any;
+  isPref?: null | boolean;
 };
-export default function NewsCard({ article }: NewsCardProps) {
+export default function NewsCard({ article, isPref }: NewsCardProps) {
   const [isSliderOpen, setIsSliderOpen] = useState(false);
+  const userActions = useUserActions();
   const showSlider = () => {
     setIsSliderOpen(true);
   };
@@ -15,6 +19,12 @@ export default function NewsCard({ article }: NewsCardProps) {
     setIsSliderOpen(false);
   };
   // useEffect(() => {}, []);
+
+  const addToPrefs = () => {
+    userActions.addToPreferences(article).catch((err) => {
+      message.error(err.data);
+    });
+  };
 
   return (
     <div>
@@ -25,9 +35,10 @@ export default function NewsCard({ article }: NewsCardProps) {
       >
         <ArticleDetailComponent
           article={article}
-          addToPreferencesAction={() => null}
+          addToPreferencesAction={addToPrefs}
           opened={isSliderOpen}
           cancelAction={handleOk}
+          isPref={isPref}
         />
         <div className="flex w-full items-center justify-between space-x-6 p-6">
           <div className="flex-1 truncate">

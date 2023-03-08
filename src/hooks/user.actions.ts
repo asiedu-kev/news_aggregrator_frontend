@@ -2,6 +2,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import authSlice from "../store/slices/auth";
 import axiosService from "../services/axios";
+import { message } from "antd";
 
 export { useUserActions };
 
@@ -14,6 +15,7 @@ function useUserActions() {
     logout,
     register,
     updateUser,
+    addToPreferences,
   };
 
   function login(email: string, password: string) {
@@ -23,6 +25,7 @@ function useUserActions() {
         password,
       })
       .then((res) => {
+        message.success("Action succeeded");
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         localStorage.setItem("user", JSON.stringify(res.data));
         dispatch(
@@ -49,7 +52,7 @@ function useUserActions() {
         password,
       })
       .then((res) => {
-        console.log("hey", res);
+        message.success("Action succeeded");
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         localStorage.setItem("user", JSON.stringify(res.data.data));
         dispatch(
@@ -69,6 +72,7 @@ function useUserActions() {
         country: country,
       })
       .then((res) => {
+        message.success("Action succeeded");
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         localStorage.setItem("user", JSON.stringify(res.data));
         dispatch(
@@ -79,6 +83,23 @@ function useUserActions() {
         dispatch(authSlice.actions.setAccount(res.data.account));
         navigate("/home");
       });
+  }
+
+  function addToPreferences(article) {
+    console.log(article);
+    return axiosService
+      .post(`v1/articles`, {
+        author: article.author,
+        source: article.source,
+        title: article.title,
+        description: article.description,
+        content: article.content,
+        published_at: article.published_at,
+        url_to_image: article.url_to_image,
+        url_to_article: article.url_to_article,
+        image_url: article.image_url,
+      })
+      .then((res) => message.success("Action succeeded"));
   }
 
   function logout() {

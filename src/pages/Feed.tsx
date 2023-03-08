@@ -3,6 +3,7 @@ import NewsCard from "../components/NewsCard";
 import { DatePicker, Empty, message, Space, Spin } from "antd";
 import FilterComponent from "../components/FilterComponent";
 import axiosService from "../services/axios";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
 const { RangePicker } = DatePicker;
 
@@ -14,11 +15,12 @@ export const Feed = () => {
   const [currentCategory, setCurrentCategory] = useState("");
   const [currentSource, setCurrentSource] = useState("");
   const [datesForSearch, setDatesForSearch] = useState([]);
+  const [currentSearch, setCurrentSearch] = useState("");
   useEffect(() => {
     fetchArticles();
     fetchCategories();
     fetchSources();
-  }, [currentCategory, currentSource, datesForSearch]);
+  }, [currentCategory, currentSource, datesForSearch, currentSearch]);
 
   const fetchArticles = () => {
     setIsLoading(true);
@@ -26,9 +28,10 @@ export const Feed = () => {
       datesForSearch[0] != null ? datesForSearch[0]?.format("YYYY-MM-DD") : "";
     const secondDate =
       datesForSearch[1] != null ? datesForSearch[0]?.format("YYYY-MM-DD") : "";
+    const search = currentSearch ? currentSearch : currentCategory;
     axiosService
       .get(
-        `v1/articles?source=${currentSource}&keyword=${currentCategory}&from=${firstDate}&to=${secondDate}`
+        `v1/articles?source=${currentSource}&keyword=${search}&from=${firstDate}&to=${secondDate}`
       )
       .then((res) => {
         setIsLoading(false);
@@ -63,7 +66,20 @@ export const Feed = () => {
 
   return (
     <div>
-      <div className={"flex flex-row my-5 justify-end"}>
+      <div className={"flex flex-row my-5 justify-between"}>
+        <div className="relative border-2 w-1/3 rounded-md text-gray-400 focus-within:text-gray-600 hidden md:block">
+          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center">
+            <MagnifyingGlassIcon className="h-5 w-5" aria-hidden="true" />
+          </div>
+          <input
+            id="search-field"
+            className="block h-full w-full border-transparent py-2 pl-8 pr-3 text-gray-900 focus:border-transparent focus:outline-none focus:ring-0 focus:placeholder:text-gray-400 sm:text-sm"
+            placeholder="Search"
+            type="search"
+            name="search"
+            onChange={(val) => setCurrentSearch(val.target.value)}
+          />
+        </div>
         <Space>
           <FilterComponent
             data={categories}
