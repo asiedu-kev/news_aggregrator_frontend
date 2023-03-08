@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  news_aggregator_app:
+    container_name: news_aggregator_app
+    image: docker-react-i
+    volumes:
+      - ./src:/app/src
+    build:
+      context: .
+    ports:
+      - "4000:4000"
+    restart: always
+    environment:
+      - REACT_APP_API_BASE_URL=http://172:20:10:3:80/api/ # CHANGE THIS When you start the api
+
